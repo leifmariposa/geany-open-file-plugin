@@ -56,7 +56,7 @@ static const char *PATTERNS = "patterns";
 /**********************************************************************/
 GeanyPlugin *geany_plugin;
 
-static GtkListStore *list_store;  
+static GtkListStore *list_store;
 
 /**********************************************************************/
 enum
@@ -98,7 +98,7 @@ struct PLUGIN_DATA
 /**********************************************************************/
 typedef struct
 {
-	gchar* path;    
+	gchar* path;
 	gchar* pattern;
 } Location;
 
@@ -199,7 +199,7 @@ static void list_directory(GtkListStore *store, const char *path, const char *pa
 
 	do
 	{
-		if(entry->d_type == DT_DIR) 
+		if(entry->d_type == DT_DIR)
 		{
 			if(strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
 				continue;
@@ -239,12 +239,12 @@ static GtkTreeModel* get_files()
 		Location *location = (Location*)iter->data;
 #ifdef WIN32
 		list_directory(store, location->path, location->pattern);
-#else    
+#else
 		wordexp_t expanded_path;
 		wordexp(location->path, &expanded_path, 0);
 		list_directory(store, expanded_path.we_wordv[0], location->pattern);
 		wordfree(&expanded_path);
-#endif    
+#endif
 	}
     clear_configuration(locations);
 
@@ -394,7 +394,7 @@ static void create_tree_view(struct PLUGIN_DATA *plugin_data)
 	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(plugin_data->tree_view ), -1, "Path", renderer, "text", COLUMN_OPEN_FILE_PATH, NULL);
 	path_column = gtk_tree_view_get_column(GTK_TREE_VIEW(plugin_data->tree_view ), COLUMN_OPEN_FILE_PATH);
 	gtk_tree_view_column_set_sort_column_id(path_column, COLUMN_OPEN_FILE_PATH);
-	gtk_tree_view_column_set_max_width(path_column, WINDOW_WIDTH * 2 / 3);  
+	gtk_tree_view_column_set_max_width(path_column, WINDOW_WIDTH * 2 / 3);
 
 	/* Trigger a sort */
 	gtk_tree_view_column_clicked(filename_column);
@@ -566,26 +566,26 @@ static GSList* load_configuration(void)
 	D(log_debug("%s:%s", __FILE__, __FUNCTION__));
 
 	config = g_key_file_new();
-	config_filename = g_strconcat(geany_plugin->geany_data->app->configdir, 
+	config_filename = g_strconcat(geany_plugin->geany_data->app->configdir,
 								  G_DIR_SEPARATOR_S,
-								  "plugins", 
-								  G_DIR_SEPARATOR_S, 
-								  PLUGIN_CONF_DIRECORY, 
-								  G_DIR_SEPARATOR_S, 
-								  PLUGIN_CONF_FILE_NAME, 
+								  "plugins",
+								  G_DIR_SEPARATOR_S,
+								  PLUGIN_CONF_DIRECORY,
+								  G_DIR_SEPARATOR_S,
+								  PLUGIN_CONF_FILE_NAME,
 								  NULL);
-	if(g_key_file_load_from_file(config, config_filename, G_KEY_FILE_NONE, NULL)) 
+	if(g_key_file_load_from_file(config, config_filename, G_KEY_FILE_NONE, NULL))
 	{
 		path_list = g_key_file_get_string_list(config, LOCATIONS, PATHS, &path_list_len, NULL);
 		pattern_list = g_key_file_get_string_list(config, LOCATIONS, PATTERNS, &pattern_list_len, NULL);
 
-		if(pattern_list_len != path_list_len) 
+		if(pattern_list_len != path_list_len)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, _("Open File configuration file invalid!"));
 		}
 		else
 		{
-			for(i = 0; i < path_list_len; ++i) 
+			for(i = 0; i < path_list_len; ++i)
 			{
 				if(strlen(path_list[i]) == 0)
 					continue;
@@ -601,13 +601,13 @@ static GSList* load_configuration(void)
 	g_key_file_free(config);
 	g_free(config_filename);
 
-	if(path_list != NULL) 
+	if(path_list != NULL)
 	{
 		for(i = 0; i < path_list_len; ++i)
 			g_free(path_list[i]);
 		g_free(path_list);
 	}
-	if(pattern_list != NULL) 
+	if(pattern_list != NULL)
 	{
 		for(i = 0; i < pattern_list_len; ++i)
 			g_free(pattern_list[i]);
@@ -640,7 +640,7 @@ static void on_configure_cell_edited(G_GNUC_UNUSED GtkCellRendererText* renderer
 
 	D(log_debug("%s:%s", __FILE__, __FUNCTION__));
 
-	while(text[i] != '\0') 
+	while(text[i] != '\0')
 	{
 		++i;
 	}
@@ -651,11 +651,11 @@ static void on_configure_cell_edited(G_GNUC_UNUSED GtkCellRendererText* renderer
 		return;
 	}
 
-	// Replace old text with new 
+	// Replace old text with new
 	gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(list_store), &iter, path);
 	gtk_list_store_set(list_store, &iter, col, text, -1);
 
-} 
+}
 
 /**********************************************************************/
 static void on_configure_add_language(G_GNUC_UNUSED GtkWidget* button, gpointer data)
@@ -691,7 +691,7 @@ static void on_configure_remove_language(G_GNUC_UNUSED GtkWidget* button, gpoint
 	D(log_debug("%s:%s", __FILE__, __FUNCTION__));
 
 	selection = gtk_tree_view_get_selection (tree_view);
-	if(!gtk_tree_selection_get_selected(selection, NULL, &tree_iter)) 
+	if(!gtk_tree_selection_get_selected(selection, NULL, &tree_iter))
 	{
 		D(log_debug("%s:%s - Delete without selection!", __FILE__, __FUNCTION__));
 		return;
@@ -800,13 +800,13 @@ static void on_configure_response(G_GNUC_UNUSED GtkDialog* dialog, gint response
 		return;
 
 	config = g_key_file_new();
-	config_filename = g_strconcat(geany_plugin->geany_data->app->configdir, 
+	config_filename = g_strconcat(geany_plugin->geany_data->app->configdir,
 								  G_DIR_SEPARATOR_S,
-								  "plugins", 
-								  G_DIR_SEPARATOR_S, 
-								  PLUGIN_CONF_DIRECORY, 
-								  G_DIR_SEPARATOR_S, 
-								  PLUGIN_CONF_FILE_NAME, 
+								  "plugins",
+								  G_DIR_SEPARATOR_S,
+								  PLUGIN_CONF_DIRECORY,
+								  G_DIR_SEPARATOR_S,
+								  PLUGIN_CONF_FILE_NAME,
 								  NULL);
 
 	config_dir = g_path_get_dirname(config_filename);
@@ -816,11 +816,11 @@ static void on_configure_response(G_GNUC_UNUSED GtkDialog* dialog, gint response
 	path_list = g_malloc0( sizeof(gchar**) * list_len);
 	pattern_list = g_malloc0( sizeof(gchar**) * list_len);
 
-	if(list_len > 0) 
+	if(list_len > 0)
 	{
 		gtk_tree_model_iter_children (GTK_TREE_MODEL(list_store),&iter,NULL);
 
-		do 
+		do
 		{
 			gtk_tree_model_get(GTK_TREE_MODEL(list_store), &iter, COLUMN_CONFIG_PATH, &path_list[i], -1);
 			gtk_tree_model_get(GTK_TREE_MODEL(list_store), &iter, COLUMN_CONFIG_PATTERN, &pattern_list[i], -1);
@@ -842,7 +842,7 @@ static void on_configure_response(G_GNUC_UNUSED GtkDialog* dialog, gint response
 		g_free(data);
 	}
 
-	for(i = 0; i < list_len; ++i) 
+	for(i = 0; i < list_len; ++i)
 	{
 		g_free(path_list[i]);
 		g_free(pattern_list[i]);
