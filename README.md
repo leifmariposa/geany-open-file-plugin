@@ -28,6 +28,9 @@ After having enabled the plugin inside Geany through Geany's plugin manager,
 you'll need to setup a keybinding for triggering the Open File dialog. Go to
 the preferences, and under the Keybindings tab set the Open File keybinding, e. g. <Primary><Shift>o.
 
+Open plugin preferences and undet Open File tab add the folders that you want to be able to open files from.
+It is also possible to enter a file ending filter, e.g. *.txt.
+
 ![screenshot](https://github.com/leifmariposa/geany-open-file-plugin/blob/master/screenshots/configure.png?raw=true)
 
 Using the plugin is simple. Press the keybinding that you selected and the dialog will be shown.
